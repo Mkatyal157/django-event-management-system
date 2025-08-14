@@ -1,0 +1,165 @@
+:root{
+  --bg-dark: #0e0f13;
+  --card-bg: rgba(255,255,255,0.85);
+  --glass: rgba(255,255,255,0.8);
+  --brand: #4f46e5;      /* indigo */
+  --brand-2:#22c55e;     /* green */
+  --text-dark:#0b1020;
+}
+
+*{ box-sizing: border-box; }
+html,body{ height:100%; }
+body{
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:#111827;
+  background:#111;
+}
+
+/* overlay for photo backgrounds */
+.bg-overlay{
+  position: fixed; inset: 0; pointer-events:none;
+  background: rgba(0,0,0,0.20);
+  z-index: 0;
+}
+
+.container, main{ position: relative; z-index: 1; }
+
+/* glass card */
+.card-glass{
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 16px;
+  box-shadow: 0 10px 35px rgba(0,0,0,.25);
+  padding: 2rem;
+}
+
+/* hero */
+.hero{
+  min-height: 66vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.hero h1{
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+.hero .lead{ color: #e5e7eb; }
+
+/* buttons */
+.btn-brand{
+  background: var(--brand); border: 0; color:#fff;
+}
+.btn-brand:hover{ filter: brightness(.95); }
+.btn-outline-light{ border-color: rgba(255,255,255,.6); color:#fff; }
+.btn-outline-light:hover{ background: rgba(255,255,255,.12); color:#fff; }
+
+/* Invert “outline-light” when background is bright */
+body.ui-on-light .btn-outline-light{
+  border-color:#111; color:#111;
+}
+body.ui-on-light .btn-outline-light:hover{
+  background: rgba(0,0,0,.08); color:#111;
+}
+
+/* event cards */
+.event-card{
+  border:0; overflow: hidden; border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.15);
+  background:#fff;
+}
+.event-thumb{
+  height: 180px; background-size: cover; background-position: center;
+}
+.event-meta small{ color:#6b7280; }
+
+/* detail header/banner */
+.event-banner{
+  height: 320px; border-radius: 16px;
+  background-size: cover; background-position:center;
+  position: relative; overflow: hidden;
+}
+.event-banner::after{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.55));
+}
+.event-banner h1{
+  position:absolute; left:24px; bottom:18px; color:#fff; z-index:1;
+  text-shadow: 0 3px 14px rgba(0,0,0,.6);
+}
+
+/* Make text readable over images */
+.event-banner, .hero { position: relative; color: #fff; }
+.event-banner::before, .hero::before{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.45));
+  pointer-events:none;
+}
+
+/* === Dynamic contrast helpers (toggled by JS) === */
+body.ui-on-dark .hero-title,
+body.ui-on-dark .hero-subtitle{
+  color:#fff !important;
+  text-shadow: 0 2px 14px rgba(0,0,0,.55);
+}
+body.ui-on-light .hero-title,
+body.ui-on-light .hero-subtitle{
+  color:#111 !important;
+  text-shadow:none;
+}
+/* Auto-contrast surfaces for content that sits on photos */
+.surface {
+  background: rgba(255,255,255,0.85);
+  color: #0b1020;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 16px;
+  box-shadow: 0 10px 35px rgba(0,0,0,.18);
+}
+
+.ui-on-dark .surface {
+  background: rgba(0,0,0,0.55);
+  color: #ffffff;
+  border-color: rgba(255,255,255,.18);
+}
+
+/* Lists / cards on surfaces */
+.surface .list-group-item {
+  background: transparent;
+}
+
+.ui-on-dark .list-group-item {
+  color: #fff;
+  border-color: rgba(255,255,255,.18);
+}
+
+.ui-on-dark .text-muted { color: rgba(255,255,255,.72) !important; }
+.ui-on-light .text-muted { color: #6b7280 !important; }
+
+/* Event cards (if you use them) */
+.ui-on-dark .event-card {
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+}
+
+.ui-on-dark .bg-overlay { background: rgba(0,0,0,.38); }
+.ui-on-light .bg-overlay { background: rgba(255,255,255,.06); }
+
+/* adjust overall overlay based on background brightness */
+body.ui-on-dark .bg-overlay { background: rgba(0,0,0,.38); }
+body.ui-on-light .bg-overlay { background: rgba(255,255,255,.06); }
+
+/* quick helpers if you need to force text */
+.text-light { color:#fff !important; }
+.text-dark  { color:#111 !important; }
+
+/* Flash messages container + rounded alerts */
+.flash-container{ position:relative; z-index:2; }
+.flash-container .alert{ border-radius:.6rem; }
+
+/* Dropdown look */
+.dropdown-menu{ border-radius:14px; overflow:hidden; }
+
+/* search bar spacing */
+.filter-bar .form-control, .filter-bar .form-select{ height: 44px; }

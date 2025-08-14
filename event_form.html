@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_class %}bg-cover{% endblock %}
+
+{% block extra_head %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const imgs = [
+    "{% static 'images/event_bg1.jpg' %}",
+    "{% static 'images/event_bg2.jpg' %}",
+    "{% static 'images/event_bg3.jpg' %}"
+  ];
+  const chosen = imgs[Math.floor(Math.random()*imgs.length)];
+  document.body.style.backgroundImage = "url('" + chosen + "')";
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundPosition = "center center";
+  document.body.style.backgroundAttachment = "fixed";
+  document.body.style.backgroundSize = "cover";
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="card-glass">
+  <h2 class="mb-3">{% if form.instance.pk %}Edit Event{% else %}Create Event{% endif %}</h2>
+
+  {# --- TOP-LEVEL ERRORS (non-field + images form) --- #}
+  {% if form.non_field_errors or images_form.non_field_errors %}
+    <div class="alert alert-danger">
+      <strong>Please fix the errors below.</strong>
+      {% if form.non_field_errors %}
+        <div class="mt-2">{{ form.non_field_errors }}</div>
+      {% endif %}
+      {% if images_form.non_field_errors %}
+        <div class="mt-2">{{ images_form.non_field_errors }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" class="row g-3">
+    {% csrf_token %}
+
+    <div class="col-md-6">
+      {{ form.title.label_tag }} {{ form.title }}
+      {% if form.title.errors %}
+        <div class="text-danger small mt-1">{{ form.title.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      {{ form.location.label_tag }} {{ form.location }}
+      {% if form.location.errors %}
+        <div class="text-danger small mt-1">{{ form.location.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      {{ form.date.label_tag }} {{ form.date }}
+      {% if form.date.errors %}
+        <div class="text-danger small mt-1">{{ form.date.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      {{ form.time.label_tag }} {{ form.time }}
+      {% if form.time.errors %}
+        <div class="text-danger small mt-1">{{ form.time.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-12">
+      {{ form.description.label_tag }} {{ form.description }}
+      {% if form.description.errors %}
+        <div class="text-danger small mt-1">{{ form.description.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      {{ form.image.label_tag }} {{ form.image }}
+      <div class="form-text">Optional cover image (used on detail page).</div>
+      {% if form.image.errors %}
+        <div class="text-danger small mt-1">{{ form.image.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      {{ images_form.images.label_tag }} {{ images_form.images }}
+      <div class="form-text">Upload up to 5 photos (JPEG/PNG). New uploads are added.</div>
+      {% if images_form.images.errors %}
+        <div class="text-danger small mt-1">{{ images_form.images.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-12">
+      <div class="form-check">
+        {{ form.is_private }} {{ form.is_private.label_tag }}
+      </div>
+      {% if form.is_private.errors %}
+        <div class="text-danger small mt-1">{{ form.is_private.errors|join:", " }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-brand">Save</button>
+      <a class="btn btn-outline-secondary ms-2" href="{% url 'event_list' %}">Cancel</a>
+    </div>
+  </form>
+
+  {% if form.instance.pk and form.instance.images.all %}
+    <hr class="my-4">
+    <h5 class="mb-3">Current Photos</h5>
+    <div class="row g-3">
+      {% for img in form.instance.images.all %}
+        <div class="col-6 col-md-3">
+          <div class="position-relative">
+            <img src="{{ img.image.url }}" class="img-fluid rounded" style="height:140px; width:100%; object-fit:cover;">
+            <a href="{% url 'delete_image' form.instance.id img.id %}"
+               class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
+               onclick="return confirm('Delete this photo?')">
+              <i class="bi bi-trash"></i>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
